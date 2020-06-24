@@ -7,16 +7,30 @@ public class InteractiveGraph : MonoBehaviour
     [SerializeField] private GameObject m_Background;
     [SerializeField] private GameObject m_KnotPrefab;
 
-    private const int kKnotNum = 100;
+    private const int kKnotNum = 20;
     private GameObject[] m_Knots = new GameObject[kKnotNum];
     private float m_Left;
     private float m_Width;
     private float m_Bottom;
     private float m_Height;
 
-    public void OnDrag(Vector2 pos)
+    public void OnDrag(Vector2 posXY)
     {
-        Debug.Log($"{name} getting {pos}");
+        // localize position
+        var pos = new Vector3(
+            posXY.x - transform.localPosition.x,
+            posXY.y - transform.localPosition.y,
+            0);
+
+        // find closest knot index
+        int index = (int)Mathf.Clamp(
+            (pos.x - m_Left) * (kKnotNum - 1) / m_Width + .5f,
+            0, kKnotNum - 1);
+
+        // adjust height
+        var localPos = m_Knots[index].transform.localPosition;
+        localPos.y = pos.y;
+        m_Knots[index].transform.localPosition = localPos;
     }
 
     // Start is called before the first frame update
