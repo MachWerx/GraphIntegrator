@@ -10,7 +10,7 @@ public class InteractiveGraph : MonoBehaviour
     [SerializeField] private bool m_Integrate;
     [SerializeField] private InteractiveGraph m_OtherGraph;
 
-    private const int kKnotNum = 20;
+    private const int kKnotNum = 12;
     private GameObject[] m_Knots = new GameObject[kKnotNum];
     private float m_Left;
     private float m_Width;
@@ -49,10 +49,10 @@ public class InteractiveGraph : MonoBehaviour
     {
         float[] derivativeArray = new float[kKnotNum];
         float dx = 1.0f / kKnotNum;
-        float lastY = m_Knots[0].transform.localPosition.y / m_Height;
-        for (int i = 1; i < kKnotNum; i++)
+        float lastY = 0;
+        for (int i = 0; i < kKnotNum; i++)
         {
-            float y = m_Knots[i].transform.localPosition.y / m_Height / 5.0f;
+            float y = m_Knots[i].transform.localPosition.y / m_Height;
             derivativeArray[i] = (y - lastY) / dx;
             lastY = y;
         }
@@ -100,7 +100,7 @@ public class InteractiveGraph : MonoBehaviour
             var knot = Instantiate(m_KnotPrefab, transform);
             knot.transform.localPosition = new Vector3(
                 m_Left + i * m_Width / (kKnotNum - 1),
-                m_Bottom + i * m_Height / (kKnotNum - 1),
+                0,
                 0);
             m_Knots[i] = knot;
         }
