@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +7,8 @@ public class InteractiveGraph : MonoBehaviour
 {
     [SerializeField] private GameObject m_Background;
     [SerializeField] private GameObject m_KnotPrefab;
+    [SerializeField] private bool m_Integrate;
+    [SerializeField] private InteractiveGraph m_OtherGraph;
 
     private const int kKnotNum = 20;
     private GameObject[] m_Knots = new GameObject[kKnotNum];
@@ -31,6 +34,55 @@ public class InteractiveGraph : MonoBehaviour
         var localPos = m_Knots[index].transform.localPosition;
         localPos.y = pos.y;
         m_Knots[index].transform.localPosition = localPos;
+
+        if (m_Integrate)
+        {
+            CalculateIntegral();
+        }
+        else
+        {
+            CalculateDerivative();
+        }
+    }
+
+    private void CalculateDerivative()
+    {
+        float[] derivativeArray = new float[kKnotNum];
+        float dx = 1.0f / kKnotNum;
+        float lastY = m_Knots[0].transform.localPosition.y / m_Height;
+        for (int i = 1; i < kKnotNum; i++)
+        {
+            float y = m_Knots[i].transform.localPosition.y / m_Height / 5.0f;
+            derivativeArray[i] = (y - lastY) / dx;
+            lastY = y;
+        }
+
+        m_OtherGraph.OnUpdateGraph(derivativeArray);
+    }
+
+    private void CalculateIntegral()
+    {
+        float[] integralArray = new float[kKnotNum];
+        float runningIntegral = 0.0f;
+        float dx = 1.0f / kKnotNum;
+        for (int i = 0; i < kKnotNum; i++)
+        {
+            float y = m_Knots[i].transform.localPosition.y / m_Height;
+            runningIntegral += y * dx;
+            integralArray[i] = runningIntegral;
+        }
+
+        m_OtherGraph.OnUpdateGraph(integralArray);
+    }
+
+    private void OnUpdateGraph(float[] integralArray)
+    {
+        for (int i = 0; i < kKnotNum; i++)
+        {
+            var localPos = m_Knots[i].transform.localPosition;
+            localPos.y = integralArray[i] * m_Height;
+            m_Knots[i].transform.localPosition = localPos;
+        }
     }
 
     // Start is called before the first frame update

@@ -410,6 +410,8 @@ MonoBehaviour:
   m_Background: {fileID: 617226534}
   m_KnotPrefab: {fileID: 6758382359450002240, guid: 2867b131a5404441baf4e7a786574218,
     type: 3}
+  m_Integrate: 0
+  m_OtherGraph: {fileID: 634501414}
 --- !u!4 &562399483
 Transform:
   m_ObjectHideFlags: 0
@@ -541,6 +543,8 @@ MonoBehaviour:
   m_Background: {fileID: 560499458}
   m_KnotPrefab: {fileID: 6758382359450002240, guid: 2867b131a5404441baf4e7a786574218,
     type: 3}
+  m_Integrate: 1
+  m_OtherGraph: {fileID: 562399482}
 --- !u!4 &634501415
 Transform:
   m_ObjectHideFlags: 0
